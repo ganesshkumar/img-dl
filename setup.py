@@ -14,6 +14,7 @@ setup(
         'click',
         'validators',
         'beautifulsoup4',
+        'imgurpython'
     ],
     entry_points='''
         [console_scripts]
