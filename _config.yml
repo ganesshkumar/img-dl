@@ -1,1 +1,7 @@
 theme: jekyll-theme-cayman
+
+title: img-dl
+description: Image Downloader
+
+show_downloads: true
+google_analytics: UA-65961333-1
