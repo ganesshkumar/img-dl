@@ -54,7 +54,7 @@ class ImgurProcessor:
             click.echo(click.style('[imgdl] File already exits. Skipping', fg='yellow'))
         else:
             click.echo('%s Downloading image %s' % (ImgurProcessor.IMGUR, outname))
-            urllib.urlretrieve(url, outname, ImgurProcessor.__reporthook)
+            self.__download_file(url, outname)
             click.echo(click.style('[imgdl] Download success. Location: %s' % outname, fg='green'))
 
     def __processor_album(self, key, outname):
@@ -72,6 +72,17 @@ class ImgurProcessor:
                     click.style('[imgur] File %s already exits. Exiting' % outname, fg='yellow'))
                 sys.exit(1)
 
-        for link in image_links:
-            fullfilename = os.path.join(os.getcwd(), '%s/%s' % (outname, link.split('/')[-1]))
-            self.__process_file(link, fullfilename)
+        for index in xrange(len(image_links)):
+            link = image_links[index]
+            filename = link.split('/')[-1]
+            fullfilename = os.path.join(os.getcwd(), '%s/%s' % (outname, filename))
+            if os.path.exists(fullfilename):
+                click.echo(click.style('[imgdl] [%d/%d] File %s already exits. Skipping' % (index+1, len(image_links), filename), fg='yellow'))
+            else:
+                click.echo('%s [%d/%d] %s ' % (ImgurProcessor.IMGUR, index+1, len(image_links), filename))
+                self.__download_file(link, fullfilename)
+
+        click.echo(click.style('[imgdl] Download success. Location: %s' % outname, fg='green'))
+
+    def __download_file(self, url, outname):
+        urllib.urlretrieve(url, outname, ImgurProcessor.__reporthook)
